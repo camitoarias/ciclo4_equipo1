@@ -9,10 +9,10 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param, patch, post, put, requestBody,
+  getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
-import {Administrador} from '../models';
+import {Administrador, Credenciales} from '../models';
 import {AdministradorRepository} from '../repositories';
 import {AutenticacionService} from '../services';
 const fetch = require('node-fetch');
@@ -57,6 +57,31 @@ export class AdministradorController {
     });
     return p;
   }
+
+  @post('/personas/identificar')
+  @response(200, {
+    description: 'Identificación de usuarios'
+  })
+  async identificar(
+    @requestBody() creds: Credenciales
+  ) {
+    let p = await
+      this.servicioAutenticacion.IdentificarPersona(creds.usuario,
+        creds.clave);
+
+    if (p) {
+      let token = this.servicioAutenticacion.GenerarTokenJWT(p)
+      return {
+        datos: {nombre: p.nombre, correo: p.correo, id: p.id},
+        tk: token
+      }
+    } else {
+      throw new HttpErrors[401]('Datos invalidos');
+    }
+
+
+  }
+
 
   @get('/administradors/count')
   @response(200, {
