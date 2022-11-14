@@ -52,7 +52,7 @@ export class AdministradorController {
     let asunto = 'Registro en la plataforma Serviteca';
     let contenido = `Hola ${administrador.nombre + " " + administrador.apellido}, ya eres un administrador registrado!! tu usuario es :
     ${administrador.correo} y su contraseña es: ${clave}`;
-    fetch(`http://127.0.0.1:5000/envio-correo?correo_destino=${destino}&asunto=${asunto}&contenido=${contenido}`).then((data: any) => {
+    fetch(`https://enviocorreoserviteca.herokuapp.com/envio-correo?correo_destino=${destino}&asunto=${asunto}&contenido=${contenido}`).then((data: any) => {
       console.log(data);
     });
     return p;
