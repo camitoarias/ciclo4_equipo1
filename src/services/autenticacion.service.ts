@@ -27,7 +27,7 @@ export class AutenticacionService {
     return claveCifrada;
   }
 
-  IdentificarPersona(usuario: string, clave: string) {
+  IdentificarAdministrador(usuario: string, clave: string) {
     try {
       let p = this.personaRepository.findOne({
         where: {
@@ -54,6 +54,15 @@ export class AutenticacionService {
     },
       Llaves.llaveJWT);
     return token;
+  }
+
+  ValidarTokenJWT(token: string) {
+    try {
+      let datos = jwt.verify(token, Llaves.llaveJWT);
+      return datos;
+    } catch {
+      return false;
+    }
   }
 
 }

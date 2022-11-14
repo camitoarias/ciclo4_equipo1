@@ -19,6 +19,9 @@ import {
 } from '@loopback/rest';
 import {Servicio} from '../models';
 import {ServicioRepository} from '../repositories';
+import {authenticate} from
+'@loopback/authentication';
+
 
 export class ServicioController {
   constructor(
@@ -26,6 +29,7 @@ export class ServicioController {
     public servicioRepository : ServicioRepository,
   ) {}
 
+  @authenticate('admin')
   @post('/servicios')
   @response(200, {
     description: 'Servicio model instance',

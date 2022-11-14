@@ -12,6 +12,7 @@ import {
   getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
+import { Llaves } from '../config/llaves';
 import {Administrador, Credenciales} from '../models';
 import {AdministradorRepository} from '../repositories';
 import {AutenticacionService} from '../services';
@@ -25,7 +26,7 @@ export class AdministradorController {
     public servicioAutenticacion: AutenticacionService
   ) { }
 
-  @post('/administradors')
+  @post('/administradores')
   @response(200, {
     description: 'Administrador model instance',
     content: {'application/json': {schema: getModelSchemaRef(Administrador)}},
@@ -48,13 +49,14 @@ export class AdministradorController {
     administrador.clave = cifrada;
     let p = await this.administradorRepository.create(administrador);
 
-    let destino = administrador.correo;
+    let destinatario = administrador.correo;
     let asunto = 'Registro en la plataforma Serviteca';
     let contenido = `Hola ${administrador.nombre + " " + administrador.apellido}, ya eres un administrador registrado!! tu usuario es :
     ${administrador.correo} y su contraseña es: ${clave}`;
-    fetch(`https://enviocorreoserviteca.herokuapp.com/envio-correo?correo_destino=${destino}&asunto=${asunto}&contenido=${contenido}`).then((data: any) => {
-      console.log(data);
-    });
+    fetch(`${Llaves.urlServicioCorreo}/plataforma-de-envio-de-correo?destinatario=${destinatario}&asunto=${asunto}&contenido=${contenido}`)
+      .then((data: any) => {
+        console.log(data);
+      });
     return p;
   }
 
@@ -66,7 +68,7 @@ export class AdministradorController {
     @requestBody() creds: Credenciales
   ) {
     let p = await
-      this.servicioAutenticacion.IdentificarPersona(creds.usuario,
+      this.servicioAutenticacion.IdentificarAdministrador(creds.usuario,
         creds.clave);
 
     if (p) {
