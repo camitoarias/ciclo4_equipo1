@@ -26,7 +26,7 @@ export class AdministradorController {
     public servicioAutenticacion: AutenticacionService
   ) { }
 
-  @post('/administradores')
+  @post('/administradors')
   @response(200, {
     description: 'Administrador model instance',
     content: {'application/json': {schema: getModelSchemaRef(Administrador)}},
@@ -60,7 +60,7 @@ export class AdministradorController {
     return p;
   }
 
-  @post('/personas/identificar')
+  @post('/administradors/identificar')
   @response(200, {
     description: 'Identificación de usuarios'
   })
@@ -83,7 +83,6 @@ export class AdministradorController {
 
 
   }
-
 
   @get('/administradors/count')
   @response(200, {

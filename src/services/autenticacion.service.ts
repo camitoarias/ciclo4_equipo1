@@ -1,10 +1,10 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 import {repository} from '@loopback/repository';
-import {Llaves} from '../config/llaves';
+import {Llaves} from '../Config/llaves';
 import {Administrador} from '../models';
-import {AdministradorRepository} from '../repositories';
-const generador = require('password-generator');
-const cryptoJS = require('crypto-js');
+import { AdministradorRepository } from '../repositories';
+const generador = require("password-generator");
+const cryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
 
 
@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 export class AutenticacionService {
   constructor(
     @repository(AdministradorRepository)
-    public personaRepository: AdministradorRepository) { }
+    public administradorRepository: AdministradorRepository) { }
 
   /*
    * Add service methods here
@@ -29,7 +29,7 @@ export class AutenticacionService {
 
   IdentificarAdministrador(usuario: string, clave: string) {
     try {
-      let p = this.personaRepository.findOne({
+      let p = this.administradorRepository.findOne({
         where: {
           correo: usuario,
           clave: clave
@@ -44,12 +44,12 @@ export class AutenticacionService {
     }
   }
 
-  GenerarTokenJWT(persona: Administrador) {
+  GenerarTokenJWT(administrador: Administrador) {
     let token = jwt.sign({
       data: {
-        id: persona.id,
-        correo: persona.correo,
-        nombre: persona.nombre + " " + persona.apellido
+        id: administrador.id,
+        correo: administrador.correo,
+        nombre: administrador.nombre + " " + administrador.apellido
       }
     },
       Llaves.llaveJWT);
